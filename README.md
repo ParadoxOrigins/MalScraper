@@ -269,7 +269,7 @@ Anime ratings can be either:
 | url | string | The URL to the anime |
 | image_url | string | URL of the image |
 | thumbnail_url | string | URL of the thumbnail image |
-| es_score | number | ? | 
+| es_score | number | A number representing the accuracy of the result, where 1 is a perfect match and 0 a totally irrelevant one | 
 | payload | object | An object containing additional data about the anime |
 | payload.media_type | string | The type of the anime, can be either `TV`, `Movie`, `OVA` or `Special` |
 | payload.start_year | number | The year the airing of the anime started |
