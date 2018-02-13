@@ -147,7 +147,6 @@ const year = 2017
 const season = 'fall'
 
 malScraper.getSeason(year, season)
-  // `data` is an object containing the following keys: 'TV', 'OVAs', 'ONAs', 'Movies' and 'Specials'
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
 ```
@@ -296,6 +295,8 @@ Anime ratings can be either:
 | payload.status | string | The current status of the anime (whether it is still airing, finished...) |
 
 ### Seasonal release data model
+
+**Note: If nothing is found for the given date, the current year/season releases list will be returned**
 
 | Property | Type | Description |
 | --- | --- | --- |
