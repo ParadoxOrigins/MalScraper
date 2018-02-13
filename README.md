@@ -152,7 +152,7 @@ malScraper.getSeason(year, season)
   .catch((err) => console.log(err))
 ```
 
-Returns: A [Seasonal release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-airing-data-model) object
+Returns: A [Seasonal release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-release-data-model) object
 
 ### Get a user watch list
 ```javascript
