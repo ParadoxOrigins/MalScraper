@@ -25,7 +25,7 @@
 </p>
 
 At the moment, _MalScraper_ allows one to:
-* Gather information about all the anime being releases in a season.
+* Gather information about all the anime being released in a season.
 * Gather anime-related news (include light-novels, manga, films...). 160 news available.
 * Make an anime search.
 * Get different information for this anime.
@@ -48,6 +48,12 @@ Tables of content:
 - * [getSeason()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#getseason)
 - * [getNewsNoDetails()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#getnewsnodetails)
 * [Data models](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#data-models)
+- * [Anime data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md##anime-data-model)
+- * [Character data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#character-data-model)
+- * [Staff data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#staff-data-model)
+- * [Search result data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#search-result-data-model)
+- * [Seasonal release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-release-data-model)
+- * [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model)
 * [Contributing](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#contributing)
 * [License](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#license)
 
@@ -123,6 +129,31 @@ malScraper.getResultsFromSearch(query)
 
 Returns: An array of a maximum length of 10 containing [Search result data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#search-result-data-model) objects
 
+### getSeason()
+
+This method get the list of anime, OVAs, movies and ONAs released (or planned to be released) during the season of the specified year
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| year | number | The year |
+| season | string | The season, must be either `spring`, `summer`, `fall` or `winter` |
+
+Usage example: 
+
+```javascript
+const malScraper = require('mal-scraper')
+
+const year = 2017
+const season = 'fall'
+
+malScraper.getSeason(year, season)
+  // `data` is an object containing the following keys: 'TV', 'OVAs', 'ONAs', 'Movies' and 'Specials'
+  .then((data) => console.log(data))
+  .catch((err) => console.log(err))
+```
+
+Returns: A [Seasonal release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-airing-data-model) object
+
 ### Get a user watch list
 ```javascript
 const malScraper = require('mal-scraper')
@@ -131,19 +162,6 @@ const username = 'Kylart'
 
 // Get you an object containing all the entries with status, score... from this user's watch list
 malScraper.getWatchListFromUser(username)
-  .then((data) => console.log(data))
-  .catch((err) => console.log(err))
-```
-
-### Get seasonal information
-```javascript
-const malScraper = require('mal-scraper')
-
-const year = 2017
-const season = 'fall'
-
-malScraper.getSeason(year, season)
-  // `data` is an object containing the following keys: 'TV', 'OVAs', 'Movies'
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
 ```
@@ -276,6 +294,32 @@ Anime ratings can be either:
 | payload.aired | string | The date from which the airing started to the one from which it ended |
 | payload.score | string | The average score given to this anime |
 | payload.status | string | The current status of the anime (whether it is still airing, finished...) |
+
+### Seasonal release data model
+
+| Property | Type | Description |
+| --- | --- | --- |
+| TV | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) |
+| OVAs | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) |
+| ONAs | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) |
+| Movies | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) |
+| Specials | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) |
+
+#### Seasonal anime release data model
+
+| Property | Type | Description |
+| --- | --- | --- |
+| picture | string | Link to the picture of the anime |
+| synopsis | string | The synopsis of the anime |
+| licensor | string | The licensor |
+| title | string | The name of the anime |
+| link | string | The direct link to the anime page |
+| genres | array | An array of strings which are the genres of this anime |
+| producers | array | An array of strings which are the producers of this anime | 
+| fromType | string | From what this anime is based on/an adaptation of (Light novel, manga...) |
+| nbEp | string | The number of aired episodes this anime has |
+| releaseDate | string | When this anime has been released |
+| score | string | The average score users have given to this anime |
 
 ## Contributing
 1. Fork it!
