@@ -147,13 +147,22 @@ const year = 2017
 const season = 'fall'
 
 malScraper.getSeason(year, season)
+  // `data` is an object containing the following keys: 'TV', 'OVAs', 'ONAs', 'Movies' and 'Specials'
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
 ```
 
 Returns: A [Seasonal release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-release-data-model) object
 
-### Get a user watch list
+### getWatchListFromUser()
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| username | string | The name of the user |
+| type | string | Optional, can be either `anime` or `manga` |
+
+Usage example: 
+
 ```javascript
 const malScraper = require('mal-scraper')
 
@@ -164,6 +173,8 @@ malScraper.getWatchListFromUser(username)
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
 ```
+
+Returns: A [User watch list data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#user-watch-list-data-model) object
 
 ### Get news
 ```javascript
@@ -300,11 +311,11 @@ Anime ratings can be either:
 
 | Property | Type | Description |
 | --- | --- | --- |
-| TV | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) |
-| OVAs | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) |
-| ONAs | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) |
-| Movies | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) |
-| Specials | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) |
+| TV | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) objects |
+| OVAs | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) objects |
+| ONAs | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) objects |
+| Movies | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) objects |
+| Specials | array | An array of [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model) objects |
 
 #### Seasonal anime release data model
 
@@ -321,6 +332,102 @@ Anime ratings can be either:
 | nbEp | string | The number of aired episodes this anime has |
 | releaseDate | string | When this anime has been released |
 | score | string | The average score users have given to this anime |
+
+### User watch list data model
+
+| Property | Type | Description |
+| --- | --- | --- |
+| stats | object | A [User stats data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#user-stats-data-model) object |
+| lists | array | An array of [User anime entry data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#user-anime-entry-data-model) objects or [User manga entry data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#user-manga-entry-data-model)|
+
+#### User stats data model
+
+| Property | Type | Description |
+| --- | --- | --- |
+| userID | string | The unique identifier of this user |
+| username | string | The username of the user |
+| nbWatching | string | Count of animes this user is watching |
+| nbCompleted | string | Count of animes this user has completed |
+| nbOnHold | string | Count of animes this user has marked as `On hold` |
+| nbDropped | string | Count of animes this user dropped |
+| nbPlanToWatch | string | Count of animes this user plan to watch | 
+| nbDaysSpentWatching | string | Estimated count of days this user spent to watch animes |
+
+#### User anime entry data model
+
+| Property | Type | Description |
+| --- | --- | --- |
+| id | string | The unique identifier of this anime |
+| title | string | The title of the anime |
+| synonyms | string | Synonyms to the anime title |
+| type | string | The type of the anime, see the [Types references](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#types-references) |
+| nbEpisodes | string | Count of episodes this anime has |
+| seriesStatus | string | The status of the anime, see the [Series statuses references](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#series-statuses-references) |
+| seriesStart | string | A `yyyy-mm-dd` format date of when the anime started | 
+| seriesEnd | string | A `yyyy-mm-dd` format date of when the anime ended |
+| picture | string | Link to the cover picture of the anime |
+| myID | string | Deprecated |
+| nbWatchedEpisode | string | Count of how many episodes the user watched of this anime |
+| myStartDate | string | A `yyyy-mm-dd` format date of when the user started watching this anime |
+| myEndDate | string | A `yyyy-mm-dd` format date of when the user finished watching this anime |
+| score | string | The score the user has given to this anime |
+| status | string | Status of the anime in the user's watch list (completed, on-hold...), see the [Statuses references](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#statuses-references) |
+| rewatching | string | Whether the user is re-watching this anime or not, where `0` means not |
+| rewatchingEp | string | The episode the user is currently re-watching, `0` if the user isn't re-watching the anime |
+| lastUpdate | string | [UNIX timestamp](https://en.wikipedia.org/wiki/Unix_time) (in seconds) of when the user last updated something about this anime |
+| tags | string | The tags the user has given to this anime |
+
+#### User manga entry data model
+
+| Property | Type | Description |
+| --- | --- | --- |
+| id | string | The unique identifier of this manga |
+| title | string | The title of the manga |
+| synonyms | string | Synonyms to the anime manga |
+| type | string | The type of the manga, see the [Types references](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#types-references) |
+| nbChapters | string | Total count of chapters this manga has |
+| nbVolumes | string | Count of volumes this manga has |
+| seriesStatus | string | The status of the manga, see the [Series statuses references](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#series-statuses-references) |
+| seriesStart | string | A `yyyy-mm-dd` format date of when the manga started | 
+| seriesEnd | string | A `yyyy-mm-dd` format date of when the manga ended |
+| picture | string | Link to the cover picture of the manga |
+| myID | string | Deprecated |
+| nbReadChapters | string | Count of how many chapters of this manga the user has read |
+| nbReadVolumes | string | Count of how many volumes of this manga the user has read |
+| myStartDate | string | A `yyyy-mm-dd` format date of when the user started watching this anime |
+| myEndDate | string | A `yyyy-mm-dd` format date of when the user finished watching this anime |
+| score | string | The score the user has given to this manga |
+| status | string | Status of the manga in the user's watch list (completed, on-hold...), see the [Statuses references](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#statuses-references) |
+| rereading | string | Whether the user is re-reading this manga or not, where `0` means not |
+| rereadinggg | string | ?? |
+| lastUpdate | string | [UNIX timestamp](https://en.wikipedia.org/wiki/Unix_time) (in seconds) of when the user last updated something about this manga |
+| tags | string | The tags the user has given to this manga |
+
+The types, statuses and series statuses aren't explicitly given by MyAnimeList, a number is given instead, here's the corresponding statuses/types according to their numbers
+
+#### Types references
+
+* `0`: Unknown
+* `1`: TV | Manga
+* `2`: OVA | Novel
+* `3`: Movie | One-shot
+* `4`: Special | Doujinshi
+* `5`: ONA | Manhwha
+* `6`: Music | Manhua
+
+#### Statuses references
+
+* `1`: Watching | Reading
+* `2`: Completed
+* `3`: On-hold
+* `4`: Dropped
+* `6`: Plan-to-watch | Plan-to-read
+
+#### Series statuses references
+
+* `1`: Currently airing | Publishing
+* `2`: Finished airing | Finished
+* `3`: Not yet aired | Not yet published
 
 ## Contributing
 1. Fork it!
