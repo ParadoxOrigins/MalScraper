@@ -179,12 +179,18 @@ Returns: A [User watch list data model](https://github.com/ParadoxOrigins/MalScr
 
 ### getNewsNoDetails()
 
+| Parameter | Type | Description |
+| --- | --- | --- |
+| nbNews | number | The count of news you want to get, default is 160. Note that there is 20 news per page, so if you set it to 60 for example, it will result in 3 requests. You should be aware of that, as MyAnimeList will most likely rate-limit you if more than 35-40~ requests are done in a few seconds |
+
 Usage example: 
 
 ```javascript
 const malScraper = require('mal-scraper')
 
-malScraper.getNewsNoDetails()
+const nbNews = 120;
+
+malScraper.getNewsNoDetails(nbNews)
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
 ```
