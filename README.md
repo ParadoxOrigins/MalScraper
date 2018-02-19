@@ -54,6 +54,7 @@ Tables of content:
 - * [Search result data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#search-result-data-model)
 - * [Seasonal release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-release-data-model)
 - * [Seasonal anime release data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#seasonal-anime-release-data-model)
+- * [News data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#news-data-model)
 * [Contributing](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#contributing)
 * [License](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#license)
 
@@ -176,15 +177,19 @@ malScraper.getWatchListFromUser(username)
 
 Returns: A [User watch list data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#user-watch-list-data-model) object
 
-### Get news
+### getNewsNoDetails()
+
+Usage example: 
+
 ```javascript
 const malScraper = require('mal-scraper')
 
 malScraper.getNewsNoDetails()
-  // `data` is an array containing 160 entries
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
 ```
+
+Returns: An array of [News data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#news-data-model) objects
 
 ### Use the official MyAnimeList API
 > This requires a valid MyAnimeList account
@@ -428,6 +433,16 @@ The types, statuses and series statuses aren't explicitly given by MyAnimeList, 
 * `1`: Currently airing | Publishing
 * `2`: Finished airing | Finished
 * `3`: Not yet aired | Not yet published
+
+#### News data model
+
+| Property | Type | Description |
+| --- | --- | --- |
+| title | string | The title of the news |
+| link | string | The link to the article |
+| image | string | URL of the cover image of the article |
+| text | string | A short preview of the news description |
+| newsNumber | string | The unique identifier of the news |
 
 ## Contributing
 1. Fork it!
