@@ -47,6 +47,10 @@ Tables of content:
 - * [getWatchListFromUser()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#getwatchlistfromuser)
 - * [getSeason()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#getseason)
 - * [getNewsNoDetails()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#getnewsnodetails)
+- * [Official API Constructor](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#official-api-constructor)
+- - * [checkCredentials()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#checkcredentials)
+- - * [search()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#search)
+- - * [actOnList()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#actonlist)
 * [Data models](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#data-models)
 - * [Anime data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md##anime-data-model)
 - * [Character data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#character-data-model)
@@ -197,8 +201,17 @@ malScraper.getNewsNoDetails(nbNews)
 
 Returns: An array of [News data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#news-data-model) objects
 
-### Use the official MyAnimeList API
+### Official API constructor
 > This requires a valid MyAnimeList account
+
+_MalScraper_ also provide a full coverage of MyAnimeList's official API. The official API methods are available once you initialized the `officialApi` constructor
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| username | string | The username of the account to use for the official API |
+| password | string | The password of the account to use for the official API |
+
+Usage example:
 
 ```javascript
 const malScraper = require('mal-scraper')
@@ -206,26 +219,92 @@ const malScraper = require('mal-scraper')
 const api = new malScraper.officialApi({
   username: 'my_super_username',
   password: 'my_super_secret_password'
-})
+});
+```
 
-const name = 'Sakura Trick'
-const id = 20047  // ID of this anime on MyAnimeList
+#### checkCredentials()
 
-// This api offers three methods: search, actOnList and checkCredentials
+This method allows you to check if the credentials given in the constructor are valid
+
+Usage example:
+
+```js
+const malScraper = require('mal-scraper')
+
+const api = new malScraper.officialApi({
+  username: 'my_super_username',
+  password: 'my_super_secret_password'
+});
+
 api.checkCredentials()
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
+```
+
+Returns: A string `"Invalid credentials"` if the credentials are invalid, otherwise, the raw XML document with the id and the username of the account
+
+#### search()
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| type | string | The type, can be either `manga` or `anime`. Default is `anime` |
+| name | string | The name of the manga/anime to search |
+
+```js
+const malScraper = require('mal-scraper')
+
+const api = new malScraper.officialApi({
+  username: 'my_super_username',
+  password: 'my_super_secret_password'
+});
+
+const name = 'Sakura Trick';
+const type = 'manga';
 
 // type can be either 'anime' or 'manga'
-api.search(type = 'anime', name)
+api.search(type, name)
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
+```
+
+Returns: An array of [anime search results data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#anime-search-results-data-model) or [manga search results data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#manga-search-results-data-model) objects
+
+#### actOnList()
+
+This method allows you to act on the account given in the constructor anime list
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| action | object | An object which should contain the type of the manga/anime and the action to do |
+| action.support | string | The type of the manga/anime to act on. Can be either `anime` or `manga` |
+| action.action | string | The action to do, can be either `add`, `update` or `delete` |
+| id | number | The unique identifier of the manga/anime |
+| name | string | The name of the manga/anime to search |
+| details | object | An object that can contain all the properties described [here](https://myanimelist.net/modules.php?go=api#animevalues) |
+| details.episodes | number | Anime only - Number of episodes you watched |
+| details.status | number OR string | Whether you completed, dropped... the anime/manga, see the [statuses references](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#statuses-references) |
+| details.score | number | The score you would give to this anime/manga, must be a whole number between 0 and 10 |
+| details.times_rewatched | number | Anime only - Number of times you re-watched the anime |
+| details.date_start | string | mmddyyyy date format of when you finished the anime/manga |
+| details.date_finish | string | mmddyyyy date format of when you finished the anime/manga |
+| details.tags | string | Tags separated by commas that you think correspond to this anime/manga |
+| details.volumes | number | Manga only - Number of volumes you read |
+| details.times_reread | number | Manga only - Number of times you re-read this manga |
+
+```js
+const malScraper = require('mal-scraper')
+
+const api = new malScraper.officialApi({
+  username: 'my_super_username',
+  password: 'my_super_secret_password'
+});
+
+const id = 20047;
 
 api.actOnList({
-  support: 'anime', // Can be either 'anime' or 'manga'
-  action: 'add' // Can be either 'add', 'update' or 'delete'
+  support: 'anime',
+  action: 'add' 
 }, id, {
-  // All the opts are as described at this link: https://myanimelist.net/modules.php?go=api#animevalues
   status: 1,
   score: 10
 })
@@ -449,6 +528,41 @@ The types, statuses and series statuses aren't explicitly given by MyAnimeList, 
 | image | string | URL of the cover image of the article |
 | text | string | A short preview of the news description |
 | newsNumber | string | The unique identifier of the news |
+
+#### Anime search results data model
+
+| Property | Type | Description |
+| --- | --- | --- |
+| id | string | The unique identifier of this anime |
+| title | string | The title of the anime |
+| english | string | The english title of the anime |
+| synonyms | string | A set of synonyms of this anime |
+| episodes | string | The total count of aired episodes this anime has |
+| score | string | The average score given by users to this anime |
+| type | string | The type of the anime (TV, OVA...) |
+| status | string | The status of the anime (Airing, Finished airing...) | 
+| start_date | string | A yyyy-mm-dd date format of when the anime started to be aired |
+| end_date | string | A yyyy-mm-dd date format of when the anime finished |
+| synopsis | string | The synopsis of the anime |
+| image | string | URL to the cover image of the anime |
+
+#### Manga search results data model
+
+| Property | Type | Description |
+| --- | --- | --- |
+| id | string | The unique identifier of this manga |
+| title | string | The title of the manga |
+| english | string | The english title of the manga |
+| synonyms | string | A set of synonyms of this manga |
+| chapters | string | The total count of chapters this manga has |
+| volumes | string | The total count of volumes this manga has |
+| score | string | The average score given by users to this manga |
+| type | string | The type of the manga (Manga, Doujinshi...) |
+| status | string | The status of the manga (Publishing, Finished...) | 
+| start_date | string | A yyyy-mm-dd date format of when the manga started publication |
+| end_date | string | A yyyy-mm-dd date format of when the manga finished |
+| synopsis | string | The synopsis of the manga |
+| image | string | URL to the cover image of the manga |
 
 ## Contributing
 1. Fork it!
