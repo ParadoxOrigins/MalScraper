@@ -47,6 +47,7 @@ Tables of content:
 - * [getWatchListFromUser()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#getwatchlistfromuser)
 - * [getSeason()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#getseason)
 - * [getNewsNoDetails()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#getnewsnodetails)
+- * [getEpisodesList()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#getepisodeslist)
 - * [Official API Constructor](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#official-api-constructor)
 - - * [checkCredentials()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#checkcredentials)
 - - * [search()](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#search)
@@ -201,6 +202,29 @@ malScraper.getNewsNoDetails(nbNews)
 
 Returns: An array of [News data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#news-data-model) objects
 
+### getEpisodesList()
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| anime | object | Details about the anime to get the episodes list from |
+| anime.name | string | The name of the anime |
+| anime.id | number | The unique identifier of this anime |
+
+Usage example: 
+
+```javascript
+const malScraper = require('mal-scraper')
+
+malScraper.getEpisodesList({
+  name: 'Sakura Trick',
+  id: 20047
+})
+  .then((data) => console.log(data))
+  .catch((err) => console.log(err))
+```
+
+Returns: An array of [Anime episodes data model](https://github.com/ParadoxOrigins/MalScraper/blob/master/README.md#anime-episodes-data-model) objects
+
 ### Official API constructor
 > This requires a valid MyAnimeList account
 
@@ -208,8 +232,9 @@ _MalScraper_ also provide a full coverage of MyAnimeList's official API. The off
 
 | Parameter | Type | Description |
 | --- | --- | --- |
-| username | string | The username of the account to use for the official API |
-| password | string | The password of the account to use for the official API |
+| credentials | object | Object of a MAL account credentials | 
+| credentials.username | string | The username of the account to use for the official API |
+| credentials.password | string | The password of the account to use for the official API |
 
 Usage example:
 
@@ -528,6 +553,16 @@ The types, statuses and series statuses aren't explicitly given by MyAnimeList, 
 | image | string | URL of the cover image of the article |
 | text | string | A short preview of the news description |
 | newsNumber | string | The unique identifier of the news |
+
+#### Anime episodes data model
+
+| Property | Type | Description |
+| --- | --- | --- |
+| epNumber | number | The episode number |
+| aired | string | A "Jan 10, 2014" date like of when the episode has been aired |
+| discussionLink | string | - |
+| title | string | The title of the episode |
+| japaneseTitle | string | The japanese title of the episode |
 
 #### Anime search results data model
 
